@@ -1,20 +1,45 @@
 import axios from "axios";
 const url = "http://localhost:8001/api/v1";
 
-export const createUser = async (form) => {
-  const { data } = await axios.post(url + "/user/register", form);
-  console.log(data);
-  return data;
-};
-export const loginUser = async (obj) => {
+const apiProcessor = async ({ method, data, url }) => {
   try {
-    const response = await axios.post(url + "/user/login", obj);
-
+    const response = await axios({
+      method,
+      url,
+      data,
+    });
     return response.data;
   } catch (error) {
-    return {
-      status: "error",
-      message: error.message,
-    };
+    console.log(error);
   }
+};
+
+// post new user
+export const postUser = (data) => {
+  const options = {
+    method: "post",
+    url: url + "/user/register",
+    data,
+  };
+  return apiProcessor(options);
+};
+
+// verify user email acoount
+export const emailVerifyUser = (data) => {
+  const options = {
+    method: "patch",
+    url: url + "/user/verify-email",
+    data,
+  };
+  return apiProcessor(options);
+};
+
+// verify user email acoount
+export const loginUser = (data) => {
+  const options = {
+    method: "post",
+    url: url + "/user/login",
+    data,
+  };
+  return apiProcessor(options);
 };
