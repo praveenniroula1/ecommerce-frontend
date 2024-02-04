@@ -13,3 +13,7 @@ export const loginUserAction = (data) => async (dispatch) => {
     dispatch(setUser(user));
   }
 };
+
+export const logoutAction = () => (dispatch) => {
+  dispatch(setUser({}));
+};

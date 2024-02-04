@@ -43,3 +43,22 @@ export const loginUser = (data) => {
   };
   return apiProcessor(options);
 };
+
+// fetch category
+export const fetchCategory = (_id) => {
+  const options = {
+    method: "get",
+    url: _id ? url + "/category" + "/" + _id : url + "/category",
+  };
+  return apiProcessor(options);
+};
+
+// post category
+export const postCategory = (data) => {
+  const options = {
+    method: "post",
+    url: url + "/category",
+    data,
+  };
+  return apiProcessor(options);
+};

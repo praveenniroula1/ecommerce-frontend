@@ -12,3 +12,6 @@
   margin-left: auto;
   margin-right: auto;
 }
+.fixing {
+  --bs-table-bg-type: rgb(243, 120, 37);
+}

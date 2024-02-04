@@ -1,18 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  showSideMenu: true,
+  showSideMenu: false,
 };
 const systemSlice = createSlice({
-  name: "system",
+  name: "userSystem",
   initialState,
   reducers: {
-    setSystem: (state, { payload }) => {
-      state.system = payload;
+    setShowSideMenu: (state, { payload }) => {
+      state.showSideMenu = payload;
     },
   },
 });
 
 const { reducer, actions } = systemSlice;
-export const { setSystem } = actions;
+export const { setShowSideMenu } = actions;
 export default reducer;
