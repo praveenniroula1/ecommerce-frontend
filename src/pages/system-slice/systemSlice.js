@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   showSideMenu: false,
+  modalShow: false,
 };
 const systemSlice = createSlice({
   name: "userSystem",
@@ -10,9 +11,12 @@ const systemSlice = createSlice({
     setShowSideMenu: (state, { payload }) => {
       state.showSideMenu = payload;
     },
+    setModalShow: (state) => {
+      state.modalShow = !state.modalShow;
+    },
   },
 });
 
 const { reducer, actions } = systemSlice;
-export const { setShowSideMenu } = actions;
+export const { setShowSideMenu, setModalShow } = actions;
 export default reducer;

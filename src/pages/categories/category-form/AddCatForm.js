@@ -24,6 +24,7 @@ const AddCatForm = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
+    console.log(form.parentId);
     dispatch(postCategoriesAction(form));
   };
   const { categories } = useSelector((state) => state.category);

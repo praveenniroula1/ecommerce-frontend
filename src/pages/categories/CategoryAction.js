@@ -1,5 +1,10 @@
 import { toast } from "react-toastify";
-import { fetchCategory, postCategory } from "../../helper/axiosHelper";
+import {
+  deleteCategory,
+  fetchCategory,
+  postCategory,
+  updateCategory,
+} from "../../helper/axiosHelper";
 import { setCategories } from "./categorySlice";
 
 export const fetchCategoriesAction = () => async (dispatch) => {
@@ -12,5 +17,23 @@ export const postCategoriesAction = (data) => async (dispatch) => {
   toast.promise(promisePending, { pending: "Please wait ..." });
   const { status, message } = await promisePending;
   toast[status](message);
+  status === "success" && dispatch(fetchCategoriesAction());
+};
+
+export const updtateCategoriesAction = (data) => async (dispatch) => {
+  const promisePending = updateCategory(data);
+  toast.promise(promisePending, { pending: "Please wait ..." });
+  const { status, message } = await promisePending;
+  toast[status](message);
+  status === "success" && dispatch(fetchCategoriesAction());
+};
+
+export const deleteCategoriesAction = (_id) => async (dispatch) => {
+  const pormisePending = deleteCategory(_id);
+  toast.promise(pormisePending, { pending: "Please wait ..." });
+
+  const { status, message } = await pormisePending;
+  toast[status](message);
+
   status === "success" && dispatch(fetchCategoriesAction());
 };

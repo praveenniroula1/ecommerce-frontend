@@ -5,7 +5,7 @@ import Footer from "../../components/footer/Footer";
 import CustomInputField from "../../components/customInputField/CustomInputField";
 import { Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUserAction } from "./UserAction";
+import { autoLogin, loginUserAction } from "./UserAction";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
@@ -20,7 +20,7 @@ const LoginPage = () => {
   const { user } = useSelector((state) => state.admin);
 
   useEffect(() => {
-    user?._id && navigate(origin);
+    user?._id ? navigate(origin) : dispatch(autoLogin());
   }, [user, navigate]);
 
   const handleOnChange = (e) => {
