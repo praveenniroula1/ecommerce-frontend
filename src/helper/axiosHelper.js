@@ -1,11 +1,11 @@
 import axios from "axios";
 const url = "http://localhost:8001/api/v1";
 
-const apiProcessor = async ({ method, data, url, isPrivate }) => {
+const apiProcessor = async ({ method, data, url, isPrivate, token }) => {
   try {
     const headers = isPrivate
       ? {
-          Authorization: sessionStorage.getItem("accessJwt"),
+          Authorization: token || sessionStorage.getItem("accessJwt"),
         }
       : null;
 
@@ -18,6 +18,23 @@ const apiProcessor = async ({ method, data, url, isPrivate }) => {
     return response.data;
   } catch (error) {
     console.log(error);
+    if (error.response && error.response.status === 401) {
+      sessionStorage.removeItem("accessJwt");
+      localStorage.removeItem("refreshJwt");
+    }
+    if (error.response && error.response.data) {
+      message = error.response.data.message;
+    }
+    if (message === "jwt expired") {
+      const accessJwt = await getNewAccessJwt();
+      if (accessJwt) {
+        return apiProcessor({ method, data, url, isPrivate, token });
+      }
+    }
+    return {
+      status: "error",
+      message,
+    };
   }
 };
 
@@ -53,13 +70,27 @@ export const loginUser = (data) => {
 };
 
 // get admin user
-export const getAdminUser = (data) => {
+export const getAdminUser = (token) => {
   const options = {
     method: "post",
     url: url + "/user",
     isPrivate: true,
+    token,
   };
   return apiProcessor(options);
+};
+
+// get admin user
+export const getNewAccessJwt = async () => {
+  const options = {
+    method: "post",
+    url: url + "/user" + "/accessJwt",
+    isPrivate: true,
+    token: localStorage.getItem("refreshJwt"),
+  };
+  const { status, accessJwt } = await apiProcessor(options);
+  status === "success" && sessionStorage.setItem("accessJwt", accessJwt);
+  return accessJwt;
 };
 
 // fetch category

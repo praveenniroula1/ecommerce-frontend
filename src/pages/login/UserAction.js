@@ -1,5 +1,9 @@
 import { toast } from "react-toastify";
-import { getAdminUser, loginUser } from "../../helper/axiosHelper";
+import {
+  getAdminUser,
+  getNewAccessJwt,
+  loginUser,
+} from "../../helper/axiosHelper";
 import { setUser } from "./UserSlice";
 
 export const loginUserAction = (data) => async (dispatch) => {
@@ -21,8 +25,8 @@ export const logoutAction = () => (dispatch) => {
 };
 
 // fetch user and mount in redux store
-export const getAdminUserAction = () => async (dispatch) => {
-  const { status, message, user } = await getAdminUser();
+export const getAdminUserAction = (token) => async (dispatch) => {
+  const { status, message, user } = await getAdminUser(token);
   status === "success" && dispatch(setUser());
 };
 
@@ -33,6 +37,8 @@ export const autoLogin = () => async (dispatch) => {
   if (accessJwt) {
     dispatch(getAdminUserAction());
   } else if (refreshJwt) {
+    const token = await getNewAccessJwt();
+    token ? dispatch(getAdminUserAction(token)) : dispatch(logoutAction);
   } else {
     dispatch(logoutAction());
   }
